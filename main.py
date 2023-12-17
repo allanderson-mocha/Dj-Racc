@@ -1,7 +1,10 @@
 import settings
 import discord
 from discord import app_commands
+<<<<<<< HEAD
 from googleapiclient.discovery import build
+=======
+>>>>>>> 0e8979bed29512934155fbfdc73ccbcd8e71e4f3
 
 logger = settings.logging.getLogger("bot")
 
@@ -22,6 +25,7 @@ class aclient(discord.Client):
 client = aclient()
 tree = discord.app_commands.CommandTree(client)
 
+<<<<<<< HEAD
 @tree.command(name = "bye_john", description = "Blesses John")
 async def bye_john(ctx: discord.interactions):
     await ctx.response.send_message('Fuck you, John')
@@ -56,5 +60,10 @@ async def youtube_music_search(ctx: discord.interactions, *, query: str, max_res
 
     formatted_response = '\n'.join([f"Title: {video['title']}\nURL: {video['url']}" for video in video_results])
     await ctx.response.send_message(video_results)
+=======
+@tree.command(description= "Blesses John")
+async def hi_john(interaction: discord.interactions):
+    await interaction.response.send_message('Fuck you, John')
+>>>>>>> 0e8979bed29512934155fbfdc73ccbcd8e71e4f3
 
 client.run(settings.DISCORD_SECRET_API)

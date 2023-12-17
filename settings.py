@@ -6,7 +6,10 @@ from logging.config import dictConfig
 load_dotenv()
 
 DISCORD_SECRET_API = os.getenv("DISCORD_API_TOKEN")
+<<<<<<< HEAD
 YOUTUBE_API = os.getenv("YOUTUBE_API")
+=======
+>>>>>>> 0e8979bed29512934155fbfdc73ccbcd8e71e4f3
 
 logging_config = {
     "version" : 1,
