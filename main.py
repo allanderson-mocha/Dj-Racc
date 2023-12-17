@@ -1,6 +1,7 @@
 import settings
 import discord
 from discord import app_commands
+from googleapiclient.discovery import build
 
 logger = settings.logging.getLogger("bot")
 
@@ -21,8 +22,39 @@ class aclient(discord.Client):
 client = aclient()
 tree = discord.app_commands.CommandTree(client)
 
-@tree.command(description= "Blesses John")
-async def hi_john(interaction: discord.interactions):
-    await interaction.response.send_message('Fuck you, John')
+@tree.command(name = "bye_john", description = "Blesses John")
+async def bye_john(ctx: discord.interactions):
+    await ctx.response.send_message('Fuck you, John')
+
+async def nuh_uh(ctx: discord.interactions):
+    await ctx.response.send_message('Fuck you, John')
+
+# YouTube Search Implementation:
+YOUTUBE_API_KEY = settings.YOUTUBE_API  # Get API from settings
+youtube = build('youtube', 'v3', developerKey=YOUTUBE_API_KEY)
+
+@tree.command(name = "youtube_search", description = "Searches Youtube")
+async def youtube_music_search(ctx: discord.interactions, *, query: str, max_results: int = 5):
+    # Calling search.list for search results including snippet and contentDetails
+    request = youtube.search().list(
+        part='snippet',
+        q=query,
+        type='video',
+    )
+    response = request.execute()
+
+    # Processing response to obtain video title, URL, and duration
+    video_results = []
+    for item in response['items']:
+        video_id = item['id']['videoId']
+        video_title = item['snippet']['title']
+        video_url = f'https://www.youtube.com/watch?v={video_id}'
+        video_results.append({
+            'title' : video_title,
+            'url' : video_url,
+            })
+
+    formatted_response = '\n'.join([f"Title: {video['title']}\nURL: {video['url']}" for video in video_results])
+    await ctx.response.send_message(video_results)
 
 client.run(settings.DISCORD_SECRET_API)
