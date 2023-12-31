@@ -25,10 +25,7 @@ tree = discord.app_commands.CommandTree(client)
 
 @tree.command(name = "hi_john", description = "Blesses John")
 async def bye_john(ctx: discord.interactions):
-    await ctx.response.send_message('Fuck you, John')
-
-async def nuh_uh(ctx: discord.interactions):
-    await ctx.response.send_message('Fuck you, John')
+    await ctx.response.send_message('Hi John')
 
 # YouTube Search Implementation:
 YOUTUBE_API_KEY = settings.YOUTUBE_API  # Get API from settings
