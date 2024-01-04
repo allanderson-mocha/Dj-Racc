@@ -52,16 +52,12 @@ class YoutubeSearchView(discord.ui.View):
 client = aclient()
 tree = discord.app_commands.CommandTree(client)
 
-<<<<<<< HEAD
+
 # Quick easy message command
-@tree.command(name="salutations", description="Blesses John")
-async def hi_john(ctx: discord.interactions):
-    await ctx.response.send_message('Fuck you, John')
-=======
 @tree.command(name = "hi_john", description = "Blesses John")
 async def bye_john(ctx: discord.interactions):
     await ctx.response.send_message('Hi John')
->>>>>>> 599e4c05daae9548b5f00c50590210b7fd54f4fc
+
 
 # YouTube Search Implementation:
 YOUTUBE_API_KEY = settings.YOUTUBE_API  # Get API from settings
