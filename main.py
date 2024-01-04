@@ -1,3 +1,4 @@
+from discord.interactions import Interaction
 import settings
 import discord
 from discord import app_commands
@@ -21,6 +22,32 @@ class aclient(discord.Client):
             await tree.sync()
             self.synced = True
         print(f"{self.user} is in the houseee!")
+
+class YoutubeSearchView(discord.ui.View):
+    def __init__(self, video_results):
+        super().__init__()
+        self.video_results = video_results
+    
+    async def on_timeout(self):
+        for child in self.children:
+            child.disabled = True
+        await self.message.edit(view=self)
+    
+    async def interaction_check(self, interaction):
+        return interaction.user == self.video_results[0].get('author_id')
+
+    def add_buttons(self):
+        buttons = []
+        n = 1
+        for video in self.video_results:
+            button = discord.ui.Button(
+                style=discord.ButtonStyle.link,
+                label=f"{n}",
+                url=video['url']
+            )
+            n += 1
+            self.add_item(button)
+
 
 client = aclient()
 tree = discord.app_commands.CommandTree(client)
@@ -59,14 +86,18 @@ async def youtube_music_search(ctx: discord.interactions, *, query: str, max_res
             })
 
     # Temp output
+    view = YoutubeSearchView(video_results=video_results)
+    view.add_buttons()
     embed = discord.Embed(
         title="Choose the right video:",
         description="Select from below options",
-        color=discord.Color.blurple()
+        color=discord.Color.dark_teal()
     )
+    option_number = 1
     for video in video_results:
-        embed.add_field(name=f"{video['title']} {video['duration']}", value=video['url'], inline=False)
-    await ctx.response.send_message(embed=embed)
+        embed.add_field(name=f"{option_number}. {video['title']} {video['duration']}", value="", inline=False)
+        option_number += 1
+    await ctx.response.send_message(embed=embed, view=view)
 
 # Function to aqcuire video duration from Youtube API and convert to minutes:seconds format
 async def get_video_duration(video_id):
@@ -76,13 +107,14 @@ async def get_video_duration(video_id):
     )
     response = request.execute()
     try:
+        # Conversion to better format
         duration = response['items'][0]['contentDetails']['duration']
         minutes = int(duration[2:].split('M')[0])
         seconds = int(duration[-3:-1])
         duration = f"[{minutes}:{seconds}]"
         return duration
     except Exception as e:
-        return None
+        return ""
 
     
 # Test run for interactive message menus
