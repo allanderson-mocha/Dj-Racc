@@ -7,6 +7,8 @@ load_dotenv()
 
 DISCORD_SECRET_API = os.getenv("DISCORD_API_TOKEN")
 YOUTUBE_API = os.getenv("YOUTUBE_API")
+SPOTIFY_ID = os.getenv("SPOTIFY_ID")
+SPOTIFY_SECRET = os.getenv('SPOTIFY_SECRET')
 
 logging_config = {
     "version" : 1,
